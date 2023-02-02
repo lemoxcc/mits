@@ -1,0 +1,9 @@
+body {
+  height: 520px;
+  width: 280px;
+  background-color: skyblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
