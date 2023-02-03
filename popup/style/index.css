@@ -1,9 +1,25 @@
-body {
+html, body {
+  height: 100%;
+}
+
+:root {
+  --mits-bgc: #b1d5c8;
+}
+
+.mits-container {
   height: 520px;
-  width: 280px;
-  background-color: skyblue;
+  width: 680px;
+  padding: 16px;
+  background-color: var(--mits-bgc);
+}
+
+/* layer */
+.mits-layer .layui-layer-title {
+  background-color: #80a492;
+}
+
+.mits-layer .layui-layer-content {
   display: flex;
   justify-content: center;
-  align-items: center;
-  font-size: 24px;
+  padding: 10px;
 }
