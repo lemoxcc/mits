@@ -8,5 +8,22 @@
     "16": "assets/icon16.png",
     "48": "assets/icon48.png",
     "128": "assets/icon128.png"
-  }
+  },
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_icon": "assets/icon48.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "js": [
+        "content_scripts/index.js"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background/index.js",
+    "type": "module"
+  },
+  "permissions": ["tabs", "notifications", "storage"]
 }
