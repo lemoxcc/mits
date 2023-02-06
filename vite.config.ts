@@ -4,5 +4,8 @@ import { defineConfig } from 'vite'
 import manifest from './manifest.json'
 
 export default defineConfig({
+  build: {
+    outDir: 'mits'
+  },
   plugins: [vue(), crx({ manifest })]
 })
