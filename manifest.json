@@ -10,20 +10,24 @@
     "128": "assets/icon128.png"
   },
   "action": {
-    "default_popup": "popup/index.html",
+    "default_popup": "src/popup/index.html",
     "default_icon": "assets/icon48.png"
   },
   "content_scripts": [
     {
       "matches": ["*://*/*"],
       "js": [
-        "content_scripts/index.js"
+        "src/content-scripts/index.ts"
       ]
     }
   ],
   "background": {
-    "service_worker": "background/index.js",
+    "service_worker": "src/background/index.ts",
     "type": "module"
   },
-  "permissions": ["tabs", "notifications", "storage"]
+  "options_page": "src/options/index.html",
+  "permissions": ["tabs", "notifications", "storage"],
+  "host_permissions": [
+    "*://*/*"
+  ]
 }
