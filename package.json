@@ -1,0 +1,39 @@
+{
+  "name": "mits",
+  "version": "1.0.0",
+  "description": "A chrome plugin for notications",
+  "private": true,
+  "scripts": {
+    "build": "vue-tsc --noEmit && vite build",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fanttasy/mits.git"
+  },
+  "keywords": [
+    "mits",
+    "chrome plugin"
+  ],
+  "author": "fanttasy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fanttasy/mits/issues"
+  },
+  "homepage": "https://github.com/fanttasy/mits#readme",
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.0.6",
+    "element-plus": "^2.2.9",
+    "vue": "^3.2.37"
+  },
+  "devDependencies": {
+    "@crxjs/vite-plugin": "^1.0.12",
+    "@types/chrome": "^0.0.212",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "sass": "^1.58.0",
+    "typescript": "^4.7.4",
+    "vite": "^2.9.14",
+    "vue-tsc": "^0.38.5"
+  }
+}
