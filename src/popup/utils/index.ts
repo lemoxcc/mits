@@ -5,5 +5,7 @@ export function getChromeStorage(key: string | string[]) {
 }
 
 export async function setChromeStorage(value: StorageType) {
-  await chrome.storage.local.set(value)
+  chrome.storage.local.set(value).then(res => {
+    console.log(res);
+  })
 }

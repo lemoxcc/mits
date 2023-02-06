@@ -4,5 +4,5 @@ interface TaskInfo {
 }
 
 export interface StorageType {
-  [key: string]: TaskInfo
+  [key: string]: TaskInfo[]
 }

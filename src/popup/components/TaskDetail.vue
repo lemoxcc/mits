@@ -51,7 +51,6 @@
 
   getChromeStorage('task').then(res => {
     console.log(res);
-    
   })
 
   const taskInfoFormRef = ref<FormInstance>()
@@ -92,14 +91,16 @@
   // task form rules
   const taskInfoFormRules = reactive<FormRules>({
     name: [{ required: true, message: '请输入任务名称', trigger: 'blur' }],
-    promptTime: [{ type: 'date', required: true, message: '请选择提示时间', trigger: 'change'}],
+    // promptTime: [{ type: 'date', required: true, message: '请选择提示时间', trigger: 'change'}],
     customPromptInfo: [{ required: true, message: '请输入提示信息', trigger: 'blur' }]
   })
 
   const saveTask = async (formEl: FormInstance | undefined) => {
     if(!formEl) return
-    await formEl.validate((valid, fields) => {
-      console.log(valid)
+    await formEl.validate(async valid => {
+      const { task: taskList } = await getChromeStorage('task')
+      taskList.push(taskInfoForm)
+      await setChromeStorage({ task: taskList })
     })
   }
 
