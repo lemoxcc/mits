@@ -59,17 +59,17 @@ const onNotificationClose = (details) => {
 }
 
 
-chrome.storage.onChanged.addListener((changes) => {
-  console.log(changes);
-  if(changes.drinkKong.newValue) {
-    Object.assign(config, changes.drinkKong.newValue);
-  }
-});
+// chrome.storage.onChanged.addListener((changes) => {
+//   console.log(changes);
+//   if(changes.drinkKong.newValue) {
+//     Object.assign(config, changes.drinkKong.newValue);
+//   }
+// });
 
-chrome.runtime.onMessage.addListener((message, sender, sendRespons) => {
-  console.log(message, sender)
-  sendRespons({ status: 'ok' })
-})
+// chrome.runtime.onMessage.addListener((message, sender, sendRespons) => {
+//   console.log(message, sender)
+//   sendRespons({ status: 'ok' })
+// })
 
 
 // let status = 0; // 0: 已喝水状态  1: 打扰状态
