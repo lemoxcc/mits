@@ -5,11 +5,19 @@
       <el-button @click="editTask">编辑</el-button>
     </div>
     <div class="mits__content" v-loading="loading" style="height: 200px;">
-      <task-list :list="taskList" />
+      <task-list
+        :task-list="taskList"
+        @refresh-task-list="queryTaskList"
+      />
     </div>
     
     <!-- dialog -->
-    <task-detail v-if="dialogInfo.visible" v-model:visible="dialogInfo.visible" :operation="dialogInfo.operation" />
+    <task-detail
+      v-if="dialogInfo.visible"
+      v-model:visible="dialogInfo.visible"
+      :operation="dialogInfo.operation"
+      @refresh-task-list="queryTaskList"
+    />
   </div>
 </template>
 
@@ -23,14 +31,20 @@
   let taskList = reactive([])
   let loading = ref(false)
   onMounted(async () => {
+    await queryTaskList()
+  })
+  
+  const queryTaskList = async () => {
     try {
       loading.value = true
       const { task } = await getChromeStorage('task')
+      console.log(task);
+      
       taskList = task
     } finally {
       loading.value = false
     }
-  })
+  }
 
   const dialogInfo = reactive({
     visible: false,

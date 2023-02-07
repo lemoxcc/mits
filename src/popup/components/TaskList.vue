@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="list" style="width: 100%">
+  <el-table :data="taskList" style="width: 100%">
     <el-table-column prop="name" label="任务名称" width="180" align="center" />
     <el-table-column prop="interval" label="提示间隔" width="80" align="center" />
     <el-table-column prop="customPromptInfo" label="提示信息" align="center" show-overflow-tooltip />
@@ -15,9 +15,11 @@
 
 <script lang="ts" setup>
   defineProps({
-    list: {
+    taskList: {
       type: Array,
       default: () => []
     }
   })
+
+  defineEmits(['refreshTaskList'])
 </script>

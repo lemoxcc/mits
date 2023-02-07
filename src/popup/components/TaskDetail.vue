@@ -63,7 +63,7 @@
     }
   })
   
-  const emit = defineEmits(['update:visible'])
+  const emit = defineEmits(['update:visible', 'refreshTaskList'])
 
   const dialogVisible = computed({
     get: () => {
@@ -98,9 +98,14 @@
   const saveTask = async (formEl: FormInstance | undefined) => {
     if(!formEl) return
     await formEl.validate(async valid => {
-      const { task: taskList } = await getChromeStorage('task')
+      let { task: taskList } = await getChromeStorage('task')
+      if(!Array.isArray(taskList)) {
+        taskList = []
+      }
       taskList.push(taskInfoForm)
       await setChromeStorage({ task: taskList })
+      emit('refreshTaskList')
+      closeDialog()
     })
   }
 
