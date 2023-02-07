@@ -1,4 +1,6 @@
-export const showNotification = (message: string, onButtonClick = () => {}, onClose = () => {},id = 'reminder') => {
+import { type TaskNotificationsMessage } from './types'
+
+export const showNotification = (message: TaskNotificationsMessage, onButtonClick = () => {}, onClose = () => {}) => {
   console.log(onButtonClick);
   chrome.notifications.getPermissionLevel((level) => {
     if(level === 'granted') {
@@ -6,12 +8,11 @@ export const showNotification = (message: string, onButtonClick = () => {}, onCl
         type: 'basic',
         title: message.title,
         message: message.message,
-        iconUrl: message.icon || chrome.runtime.getURL("../assets/icon48.png"),
-        buttons: id === 'reminder' ?
-          [{title: '我有喝水哦！'}, {title: '手头有点事我过会再喝~'}] : [],
-        requireInteraction: id === 'reminder'
+        iconUrl: chrome.runtime.getURL("../assets/icon48.png"),
+        buttons: [ {title: '已完成！'}, {title: '稍后再做~'} ],
+        requireInteraction: true
       };
-      chrome.notifications.create(id + Date.now(), notificationOptions);
+      chrome.notifications.create(message.title, notificationOptions);
       chrome.notifications.onButtonClicked.addListener((clickedId, buttonIndex) => {
         onButtonClick(clickedId, buttonIndex);
       });
@@ -19,11 +20,11 @@ export const showNotification = (message: string, onButtonClick = () => {}, onCl
         onClose();
       })
     } else {
-      chrome.permissions.request('notifications', (granted) => {
+      chrome.permissions.request({ permissions: ['notifications'] }, (granted) => {
         if(granted) {
-          showNotification(message, onButtonClick, onClose, id);
+          showNotification(message, onButtonClick, onClose);
         }
-      });
+      })
     }
   })
 };
