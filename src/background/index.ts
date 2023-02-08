@@ -35,7 +35,6 @@ chrome.runtime.onInstalled.addListener((details) => {
       },
       onNotificationButtonClick,
       onNotificationClose,
-      'reminder'
     )
   } else if(details.reason === 'update') {
     showNotification(
@@ -45,17 +44,16 @@ chrome.runtime.onInstalled.addListener((details) => {
       },
       onNotificationButtonClick,
       onNotificationClose,
-      'reminder'
     )
   }
 })
 
-const onNotificationButtonClick = (details: any) => {
-  console.log(details, 'click');
+const onNotificationButtonClick = (clickedId: string, buttonIndex: number) => {
+  console.log(clickedId, buttonIndex);
 }
 
-const onNotificationClose = (details: any) => {
-  console.log(details, 'close');
+const onNotificationClose = () => {
+  console.log('close');
 }
 
 
