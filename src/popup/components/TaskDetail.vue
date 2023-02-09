@@ -17,9 +17,7 @@
       </el-form-item>
       <el-form-item label="提示间隔">
       <el-select v-model="taskInfoForm.interval" placeholder="请选择提示间隔">
-        <el-option label="五分钟" :value="5" />
-        <el-option label="十分钟" :value="10" />
-        <el-option label="半个小时" :value="30" />
+        <el-option v-for="option in promptIntervalOption" :label="option.label" :value="option.value" />
       </el-select>
     </el-form-item>
     <el-form-item label="状态">
@@ -92,6 +90,12 @@
     // ] as [Date, Date],
     customPromptInfo: ''
   })
+
+  const promptIntervalOption = reactive([
+    { label: '五分钟', value: 5 },
+    { label: '十分钟', value: 10 },
+    { label: '三十分钟', value: 30 },
+  ])
 
   // task form rules
   const taskInfoFormRules = reactive<FormRules>({
