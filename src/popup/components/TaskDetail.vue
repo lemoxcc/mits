@@ -22,7 +22,7 @@
         <el-option label="半个小时" :value="30" />
       </el-select>
     </el-form-item>
-    <el-form-item label="提示时间" prop="promptTime">
+    <!-- <el-form-item label="提示时间" prop="promptTime">
       <el-time-picker
         v-model="taskInfoForm.promptTime"
         type="date"
@@ -32,7 +32,7 @@
         end-placeholder="请选择结束时间"
         style="width: 100%"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="提示信息" prop="customPromptInfo">
       <el-input v-model="taskInfoForm.customPromptInfo" :autosize="{ minRows: 2, maxRows: 4 }" resize="none" :maxlength="50" show-word-limit type="textarea" />
     </el-form-item>
@@ -81,10 +81,10 @@
   const taskInfoForm = reactive({
     name: '',
     interval: 5,
-    promptTime: [
-      new Date(new Date().setHours(0, 0, 0, 0)),
-      new Date(new Date().setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000 - 1),
-    ] as [Date, Date],
+    // promptTime: [
+    //   new Date(new Date().setHours(0, 0, 0, 0)),
+    //   new Date(new Date().setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000 - 1),
+    // ] as [Date, Date],
     customPromptInfo: ''
   })
 
