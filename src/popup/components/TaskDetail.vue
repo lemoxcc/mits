@@ -22,6 +22,9 @@
         <el-option label="半个小时" :value="30" />
       </el-select>
     </el-form-item>
+    <el-form-item label="状态">
+      <el-switch v-model="taskInfoForm.status" />
+    </el-form-item>
     <!-- <el-form-item label="提示时间" prop="promptTime">
       <el-time-picker
         v-model="taskInfoForm.promptTime"
@@ -46,7 +49,7 @@
 
 <script lang="ts" setup>
   import { computed, reactive, ref } from "vue"
-  import { getChromeStorage, setChromeStorage } from '../utils/index'
+  import { getChromeStorage, setChromeStorage, generateUUID } from '../utils/index'
   import type { FormInstance, FormRules } from 'element-plus'
 
   getChromeStorage('task').then(res => {
@@ -79,7 +82,9 @@
   })
 
   const taskInfoForm = reactive({
+    id: generateUUID(),
     name: '',
+    status: true,
     interval: 5,
     // promptTime: [
     //   new Date(new Date().setHours(0, 0, 0, 0)),

@@ -25,7 +25,7 @@
   import TaskList from "./components/TaskList.vue"
   import TaskDetail from "./components/TaskDetail.vue"
   import { reactive, onMounted, ref } from 'vue'
-  import { getChromeStorage } from './utils/index'
+  import { getTaskList } from './utils/index'
 
   
   let taskList = reactive([])
@@ -37,9 +37,7 @@
   const queryTaskList = async () => {
     try {
       loading.value = true
-      const { task } = await getChromeStorage('task')
-      console.log(task);
-      
+      const { task } = await getTaskList()
       taskList = task
     } finally {
       loading.value = false
