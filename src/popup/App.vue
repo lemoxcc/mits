@@ -6,6 +6,7 @@
     <div class="mits__content" v-loading="loading" style="height: 200px;">
       <task-list
         :task-list="taskList"
+        @edit-task="editTask"
         @refresh-task-list="queryTaskList"
       />
       <el-pagination
@@ -23,6 +24,7 @@
     <!-- dialog -->
     <task-detail
       v-if="dialogInfo.visible"
+      ref="taskDetailRef"
       v-model:visible="dialogInfo.visible"
       :operation="dialogInfo.operation"
       @refresh-task-list="queryTaskList"
@@ -34,8 +36,10 @@
   import { Plus } from '@element-plus/icons-vue'
   import TaskList from "./components/TaskList.vue"
   import TaskDetail from "./components/TaskDetail.vue"
-  import { reactive, onMounted, ref } from 'vue'
+  import { reactive, onMounted, ref, nextTick } from 'vue'
   import { getTaskList } from './utils/index'
+
+  const taskDetailRef = ref()
 
   // 分页信息
   const page = reactive({
@@ -65,17 +69,19 @@
 
   const dialogInfo = reactive({
     visible: false,
-    operation: ''
+    operation: 0
   })
 
   const addTask = () => {
-    dialogInfo.operation = '添加'
+    dialogInfo.operation = 0
     dialogInfo.visible = true
   }
 
-  const editTask = () => {
-    dialogInfo.operation = '编辑'
+  const editTask = async (taskInfo: any) => {
+    dialogInfo.operation = 1
     dialogInfo.visible = true
+    await nextTick()
+    taskDetailRef.value.editDataInit(taskInfo)
   }
 
 </script>

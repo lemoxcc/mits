@@ -14,8 +14,8 @@
       </el-table-column>
       <el-table-column prop="customPromptInfo" label="提示信息" align="center" show-overflow-tooltip />
       <el-table-column label="操作" width="120" align="center">
-        <template #>
-          <el-button size="small" type="primary">编辑</el-button>
+        <template #default="{ row }">
+          <el-button size="small" type="primary" @click="editTask(row)">编辑</el-button>
           <el-button size="small" type="danger">删除</el-button>
         </template>
       </el-table-column>
@@ -34,7 +34,7 @@ defineProps({
   }
 })
 
-defineEmits(['refreshTaskList'])
+const emit = defineEmits(['editTask', 'refreshTaskList'])
 
 const promptIntervalFormat: { [index: number]: string } = reactive({
   5: '五分钟',
@@ -42,9 +42,8 @@ const promptIntervalFormat: { [index: number]: string } = reactive({
   30: '三十分钟'
 })
 
-const changeTaskStatus = async (row: any) => {
-  console.log(row);
-  
+// 切换任务状态
+const changeTaskStatus = async (row: any) => {  
   const { task: taskList = []} = await getTaskList()
 
   taskList.forEach(task => {
@@ -54,6 +53,11 @@ const changeTaskStatus = async (row: any) => {
   })
 
   setTaskList(taskList)
+}
+
+// 编辑任务
+const editTask = (row: any) => {
+  emit('editTask', row)
 }
 </script>
 

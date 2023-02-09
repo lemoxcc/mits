@@ -49,18 +49,15 @@
   import { computed, reactive, ref } from "vue"
   import { getChromeStorage, setChromeStorage, generateUUID } from '../utils/index'
   import type { FormInstance, FormRules } from 'element-plus'
-
-  getChromeStorage('task').then(res => {
-    console.log(res);
-  })
+  import { TaskInfo } from "../types";
 
   const taskInfoFormRef = ref<FormInstance>()
 
   const props = defineProps({
     visible: Boolean,
     operation: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     }
   })
   
@@ -76,10 +73,10 @@
   })
 
   const dialogTitle = computed(() => {
-    return `${props.operation}任务`
+    return `${props.operation ? '编辑' : '添加'}任务`
   })
 
-  const taskInfoForm = reactive({
+  let taskInfoForm = reactive({
     id: generateUUID(),
     name: '',
     status: true,
@@ -104,6 +101,12 @@
     customPromptInfo: [{ required: true, message: '请输入提示信息', trigger: 'blur' }]
   })
 
+  const editDataInit = (taskInfo: TaskInfo) => {
+    Object.assign(taskInfoForm, taskInfo)    
+  }
+
+  defineExpose({ editDataInit })
+
   const saveTask = async (formEl: FormInstance | undefined) => {
     if(!formEl) return
     await formEl.validate(async valid => {
@@ -111,7 +114,17 @@
       if(!Array.isArray(taskList)) {
         taskList = []
       }
-      taskList.push(taskInfoForm)
+      if(props.operation) {
+        // 编辑
+        taskList.forEach(item => {
+          if(item.id === taskInfoForm.id) {
+            Object.assign(item, taskInfoForm)
+          }
+        })
+      } else {
+        // 新增
+        taskList.push(taskInfoForm)
+      }
       await setChromeStorage({ task: taskList })
       emit('refreshTaskList')
       closeDialog()
