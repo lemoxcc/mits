@@ -17,12 +17,13 @@
       </el-form-item>
       <el-form-item label="提示间隔">
       <el-select v-model="taskInfoForm.interval" placeholder="请选择提示间隔">
-        <el-option label="五分钟" :value="5" />
-        <el-option label="十分钟" :value="10" />
-        <el-option label="半个小时" :value="30" />
+        <el-option v-for="option in promptIntervalOption" :label="option.label" :value="option.value" />
       </el-select>
     </el-form-item>
-    <el-form-item label="提示时间" prop="promptTime">
+    <el-form-item label="状态">
+      <el-switch v-model="taskInfoForm.status" />
+    </el-form-item>
+    <!-- <el-form-item label="提示时间" prop="promptTime">
       <el-time-picker
         v-model="taskInfoForm.promptTime"
         type="date"
@@ -32,7 +33,7 @@
         end-placeholder="请选择结束时间"
         style="width: 100%"
       />
-    </el-form-item>
+    </el-form-item> -->
     <el-form-item label="提示信息" prop="customPromptInfo">
       <el-input v-model="taskInfoForm.customPromptInfo" :autosize="{ minRows: 2, maxRows: 4 }" resize="none" :maxlength="50" show-word-limit type="textarea" />
     </el-form-item>
@@ -46,24 +47,21 @@
 
 <script lang="ts" setup>
   import { computed, reactive, ref } from "vue"
-  import { getChromeStorage, setChromeStorage } from '../utils/index'
+  import { getChromeStorage, setChromeStorage, generateUUID } from '../utils/index'
   import type { FormInstance, FormRules } from 'element-plus'
-
-  getChromeStorage('task').then(res => {
-    console.log(res);
-  })
+  import { TaskInfo } from "../types";
 
   const taskInfoFormRef = ref<FormInstance>()
 
   const props = defineProps({
     visible: Boolean,
     operation: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     }
   })
   
-  const emit = defineEmits(['update:visible'])
+  const emit = defineEmits(['update:visible', 'refreshTaskList'])
 
   const dialogVisible = computed({
     get: () => {
@@ -75,18 +73,26 @@
   })
 
   const dialogTitle = computed(() => {
-    return `${props.operation}任务`
+    return `${props.operation ? '编辑' : '添加'}任务`
   })
 
-  const taskInfoForm = reactive({
+  let taskInfoForm = reactive({
+    id: generateUUID(),
     name: '',
+    status: true,
     interval: 5,
-    promptTime: [
-      new Date(new Date().setHours(0, 0, 0, 0)),
-      new Date(new Date().setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000 - 1),
-    ] as [Date, Date],
+    // promptTime: [
+    //   new Date(new Date().setHours(0, 0, 0, 0)),
+    //   new Date(new Date().setHours(0, 0, 0, 0) + 24 * 60 * 60 * 1000 - 1),
+    // ] as [Date, Date],
     customPromptInfo: ''
   })
+
+  const promptIntervalOption = reactive([
+    { label: '五分钟', value: 5 },
+    { label: '十分钟', value: 10 },
+    { label: '三十分钟', value: 30 },
+  ])
 
   // task form rules
   const taskInfoFormRules = reactive<FormRules>({
@@ -95,12 +101,33 @@
     customPromptInfo: [{ required: true, message: '请输入提示信息', trigger: 'blur' }]
   })
 
+  const editDataInit = (taskInfo: TaskInfo) => {
+    Object.assign(taskInfoForm, taskInfo)    
+  }
+
+  defineExpose({ editDataInit })
+
   const saveTask = async (formEl: FormInstance | undefined) => {
     if(!formEl) return
     await formEl.validate(async valid => {
-      const { task: taskList } = await getChromeStorage('task')
-      taskList.push(taskInfoForm)
+      let { task: taskList } = await getChromeStorage('task')
+      if(!Array.isArray(taskList)) {
+        taskList = []
+      }
+      if(props.operation) {
+        // 编辑
+        taskList.forEach(item => {
+          if(item.id === taskInfoForm.id) {
+            Object.assign(item, taskInfoForm)
+          }
+        })
+      } else {
+        // 新增
+        taskList.push(taskInfoForm)
+      }
       await setChromeStorage({ task: taskList })
+      emit('refreshTaskList')
+      closeDialog()
     })
   }
 

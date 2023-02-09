@@ -26,36 +26,34 @@ const message = {
 };
 
 
-// chrome.runtime.onInstalled.addListener((details) => {
-//   if(details.reason === 'install') {
-//     showNotification(
-//       {
-//       title: message.installWelcomeTitle,
-//       message: message.installWelcomeContent
-//       },
-//       onNotificationButtonClick,
-//       onNotificationClose,
-//       'reminder'
-//     )
-//   } else if(details.reason === 'update') {
-//     showNotification(
-//       {
-//       title: message.installWelcomeTitle,
-//       message: message.installWelcomeContent
-//       },
-//       onNotificationButtonClick,
-//       onNotificationClose,
-//       'reminder'
-//     )
-//   }
-// })
+chrome.runtime.onInstalled.addListener((details) => {
+  if(details.reason === 'install') {
+    showNotification(
+      {
+        title: message.installWelcomeTitle,
+        message: message.installWelcomeContent
+      },
+      onNotificationButtonClick,
+      onNotificationClose,
+    )
+  } else if(details.reason === 'update') {
+    showNotification(
+      {
+        title: message.installWelcomeTitle,
+        message: message.installWelcomeContent
+      },
+      onNotificationButtonClick,
+      onNotificationClose,
+    )
+  }
+})
 
-const onNotificationButtonClick = (details) => {
-  console.log(details, 'click');
+const onNotificationButtonClick = (clickedId: string, buttonIndex: number) => {
+  console.log(clickedId, buttonIndex);
 }
 
-const onNotificationClose = (details) => {
-  console.log(details, 'close');
+const onNotificationClose = () => {
+  console.log('close');
 }
 
 

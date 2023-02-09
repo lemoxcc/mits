@@ -1,29 +1,33 @@
-export const showNotification = (message: string, onButtonClick = () => {}, onClose = () => {},id = 'reminder') => {
-  console.log(onButtonClick);
+import { type TaskNotificationsMessage } from './types'
+
+export const showNotification = (message: TaskNotificationsMessage, onButtonClick = (id: string, buttonIndex: number) => {}, onClose = () => {}) => {
   chrome.notifications.getPermissionLevel((level) => {
     if(level === 'granted') {
       const notificationOptions = {
-        type: 'basic',
+        type: 'basic' as const,
         title: message.title,
         message: message.message,
-        iconUrl: message.icon || chrome.runtime.getURL("../assets/icon48.png"),
-        buttons: id === 'reminder' ?
-          [{title: '我有喝水哦！'}, {title: '手头有点事我过会再喝~'}] : [],
-        requireInteraction: id === 'reminder'
+        iconUrl: chrome.runtime.getURL("../assets/icon48.png"),
+        buttons: [ { title: '已完成！' }, { title: '稍后再做~' } ],
+        requireInteraction: true
       };
-      chrome.notifications.create(id + Date.now(), notificationOptions);
+
+      // 加入时间戳已保证同一通知能触发
+      chrome.notifications.create(message.title + Date.now(), notificationOptions);
+      // 点击回调
       chrome.notifications.onButtonClicked.addListener((clickedId, buttonIndex) => {
         onButtonClick(clickedId, buttonIndex);
-      });
+      })
+      // 关闭回调
       chrome.notifications.onClosed.addListener(() => {
-        onClose();
+        onClose()
       })
     } else {
-      chrome.permissions.request('notifications', (granted) => {
+      chrome.permissions.request({ permissions: ['notifications'] }, (granted) => {
         if(granted) {
-          showNotification(message, onButtonClick, onClose, id);
+          showNotification(message, onButtonClick, onClose);
         }
-      });
+      })
     }
   })
 };
