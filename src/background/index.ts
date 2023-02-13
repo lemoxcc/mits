@@ -39,8 +39,8 @@ chrome.runtime.onInstalled.addListener((details) => {
   } else if(details.reason === 'update') {
     showNotification(
       {
-        title: message.installWelcomeTitle,
-        message: message.installWelcomeContent
+        title: message.updateWelcomeTitle,
+        message: message.updateWelcomeContent
       },
       onNotificationButtonClick,
       onNotificationClose,
@@ -72,24 +72,6 @@ const onNotificationClose = () => {
 
 // let status = 0; // 0: 已喝水状态  1: 打扰状态
 // let timer = null;
-
-// chrome.runtime.onInstalled.addListener(
-//   (details) => {
-//     if(details.reason === 'install') {
-//       showNotification({
-//         title: text.installWelcomeTitle,
-//         message: text.installWelcomeContent
-//       });
-//       chrome.storage.sync.set({drinkKong:config});
-//     } else if (details.reason === 'update') {
-//       showNotification({
-//         title: text.updateWelcomeTitle,
-//         message: text.updateWelcomeContent
-//       });
-//       chrome.storage.sync.set({drinkKong:config});
-//     }
-//   }
-// );
 
 // // 监听储存变化
 // chrome.storage.onChanged.addListener((changes) => {

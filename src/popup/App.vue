@@ -38,6 +38,7 @@
   import TaskDetail from "./components/TaskDetail.vue"
   import { reactive, onMounted, ref, nextTick } from 'vue'
   import { getTaskList } from './utils/index'
+  import { TaskInfo } from './types'
 
   const taskDetailRef = ref()
 
@@ -48,7 +49,7 @@
   })
   let total = ref(0)
 
-  let taskList = reactive([])
+  let taskList = reactive<TaskInfo[]>([])
   let loading = ref(false)
   onMounted(async () => {
     await queryTaskList()
@@ -57,10 +58,10 @@
   const queryTaskList = async () => {
     try {
       loading.value = true
-      const { task } = await getTaskList()
+      const { task = [] } = await getTaskList()
       const start = (page.pageNo - 1) * page.pageSize
       const end = start + page.pageSize
-      total = task.length
+      total.value = task.length
       taskList = task.slice(start, end)
     } finally {
       loading.value = false
