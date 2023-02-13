@@ -164,3 +164,9 @@ const onNotificationClose = () => {
 //   };
 //   showNotification(setting, onButtonClick, onClose, 'reminder');
 // };
+
+chrome.runtime.onMessage.addListener((message, sender, sendRespons) => {
+  showNotification(message)
+  console.log(sender);
+  sendRespons({ status: 'ok' })
+})

@@ -47,9 +47,10 @@
 
 <script lang="ts" setup>
   import { computed, reactive, ref } from "vue"
-  import { getChromeStorage, setChromeStorage, generateUUID } from '../utils/index'
+  import { getTaskList, setTaskList, generateUUID } from '../utils/index'
   import type { FormInstance, FormRules } from 'element-plus'
   import { TaskInfo } from "../types";
+  import { addTaskNotice, updateTaskNotice } from '../utils/ipc'
 
   const taskInfoFormRef = ref<FormInstance>()
 
@@ -110,7 +111,7 @@
   const saveTask = async (formEl: FormInstance | undefined) => {
     if(!formEl) return
     await formEl.validate(async valid => {
-      let { task: taskList } = await getChromeStorage('task')
+      let { task: taskList } = await getTaskList()
       if(!Array.isArray(taskList)) {
         taskList = []
       }
@@ -121,11 +122,13 @@
             Object.assign(item, taskInfoForm)
           }
         })
+        await updateTaskNotice(taskInfoForm, [{ title: '确认' }])
       } else {
         // 新增
         taskList.push(taskInfoForm)
+        await addTaskNotice(taskInfoForm, [{ title: '确认' }])
       }
-      await setChromeStorage({ task: taskList })
+      await setTaskList(taskList)
       emit('refreshTaskList')
       closeDialog()
     })
