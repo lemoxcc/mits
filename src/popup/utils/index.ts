@@ -8,7 +8,7 @@ export async function setChromeStorage(value: TaskList) {
   chrome.storage.local.set(value)
 }
 
-export async function getTaskList() {
+export async function getTaskList(): Promise<TaskList> {
   return getChromeStorage('task')
 }
 

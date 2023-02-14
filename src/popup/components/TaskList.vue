@@ -16,7 +16,7 @@
       <el-table-column label="操作" width="120" align="center">
         <template #default="{ row }">
           <el-button size="small" type="primary" @click="editTask(row)">编辑</el-button>
-          <el-button size="small" type="danger">删除</el-button>
+          <el-button size="small" type="danger" @click="deleteTack(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -24,7 +24,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
+import { reactive } from 'vue'
+import { TaskInfo } from '../types';
 import { getTaskList, setTaskList } from '../utils/index'
 
 defineProps({
@@ -59,6 +60,15 @@ const changeTaskStatus = async (row: any) => {
 const editTask = (row: any) => {
   emit('editTask', row)
 }
+
+// 删除任务
+const deleteTack = async (row: TaskInfo) => {
+  let { task: taskList = [] } = await getTaskList()
+  taskList = taskList.filter(item => item.id !== row.id)
+  setTaskList(taskList)
+  emit('refreshTaskList')
+}
+
 </script>
 
 <style lang="scss" scoped>
