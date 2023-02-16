@@ -13,14 +13,6 @@
     "default_popup": "src/popup/index.html",
     "default_icon": "assets/icon48.png"
   },
-  "content_scripts": [
-    {
-      "matches": ["*://*/*"],
-      "js": [
-        "src/content-scripts/index.ts"
-      ]
-    }
-  ],
   "background": {
     "service_worker": "src/background/index.ts",
     "type": "module"
