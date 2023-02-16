@@ -7,6 +7,8 @@ export const showNotification = (message: TaskNotificationsMessage, onButtonClic
         type: 'basic' as const,
         title: message.title,
         message: message.message,
+        eventTime: Date.now(),
+        appIconMaskUrl: chrome.runtime.getURL("../assets/icon16.png"),
         iconUrl: chrome.runtime.getURL("../assets/icon48.png"),
         buttons: message.buttons ?? [ { title: '已完成！' }, { title: '稍后再做~' } ],
         requireInteraction: true
