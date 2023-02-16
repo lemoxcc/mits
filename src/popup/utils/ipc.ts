@@ -6,18 +6,32 @@ export function IPCServiceWorker(message: any) {
 
 export function addTaskNotice(task: TaskInfo, buttons: chrome.notifications.ButtonOptions []) {
   const message = {
+    type: 'add',
     title: '提示',
     message: `添加任务"${task.name}"成功~`,
-    buttons
+    buttons,
+    task
   }
   return IPCServiceWorker(message)
 }
 
 export function updateTaskNotice(task: TaskInfo, buttons: chrome.notifications.ButtonOptions []) {
   const message = {
+    type: 'update',
     title: '提示',
     message: `更新任务"${task.name}"成功~`,
-    buttons
+    buttons,
+    task
   }
+  return IPCServiceWorker(message)
+}
+
+export function deleteTaskNotice(task: TaskInfo) {
+  const message = {
+    type: 'delete',
+    title: '提示',
+    message: `删除任务"${task.name}"成功~`,
+  }
+
   return IPCServiceWorker(message)
 }

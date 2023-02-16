@@ -27,6 +27,7 @@
 import { reactive } from 'vue'
 import { TaskInfo } from '../types';
 import { getTaskList, setTaskList } from '../utils/index'
+import { deleteTaskNotice } from '../utils/ipc'
 
 defineProps({
   taskList: {
@@ -66,6 +67,7 @@ const deleteTack = async (row: TaskInfo) => {
   let { task: taskList = [] } = await getTaskList()
   taskList = taskList.filter(item => item.id !== row.id)
   setTaskList(taskList)
+  deleteTaskNotice(row)
   emit('refreshTaskList')
 }
 
