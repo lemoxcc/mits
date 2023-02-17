@@ -103,3 +103,5 @@ mits
 
 # TernJS port file
 .tern-port
+
+*.zip
