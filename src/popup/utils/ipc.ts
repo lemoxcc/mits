@@ -26,11 +26,13 @@ export function updateTaskNotice(task: TaskInfo, buttons: chrome.notifications.B
   return IPCServiceWorker(message)
 }
 
-export function deleteTaskNotice(task: TaskInfo) {
+export function deleteTaskNotice(task: TaskInfo, buttons: chrome.notifications.ButtonOptions []) {
   const message = {
     type: 'delete',
     title: '提示',
     message: `删除任务"${task.name}"成功~`,
+    buttons,
+    task
   }
 
   return IPCServiceWorker(message)

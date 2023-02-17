@@ -4,21 +4,24 @@
       <el-button type="primary" size="large" :icon="Plus" circle @click="addTask" />
     </div>
     <div class="mits__content" v-loading="loading" style="height: 200px;">
-      <task-list
-        :task-list="taskList"
-        @edit-task="editTask"
-        @refresh-task-list="queryTaskList"
-      />
-      <el-pagination
-        class="mits__pagination"
-        background
-        hide-on-single-page
-        layout="prev, pager, next"
-        v-model:page-size="page.pageSize"
-        v-model:current-page="page.pageNo"
-        :total="total"
-        @current-change="queryTaskList"
-      />
+      <template v-if="taskList.length">
+        <task-list
+          :task-list="taskList"
+          @edit-task="editTask"
+          @refresh-task-list="queryTaskList"
+        />
+        <el-pagination
+          class="mits__pagination"
+          background
+          hide-on-single-page
+          layout="prev, pager, next"
+          v-model:page-size="page.pageSize"
+          v-model:current-page="page.pageNo"
+          :total="total"
+          @current-change="queryTaskList"
+        />
+      </template>
+      <el-empty v-else description="您还没有任何任务喔~赶快去添加吧" />
     </div>
     
     <!-- dialog -->
@@ -36,7 +39,7 @@
   import { Plus } from '@element-plus/icons-vue'
   import TaskList from "./components/TaskList.vue"
   import TaskDetail from "./components/TaskDetail.vue"
-  import { reactive, onMounted, ref, nextTick } from 'vue'
+  import { reactive, onMounted, ref, nextTick, computed } from 'vue'
   import { getTaskList } from './utils/index'
   import { TaskInfo } from './types'
 
@@ -67,6 +70,10 @@
       loading.value = false
     }
   }
+
+  const isEmptyTask = computed(() => {
+    return taskList.length === 0
+  })
 
   const dialogInfo = reactive({
     visible: false,

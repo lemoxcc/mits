@@ -2,8 +2,10 @@ import { getTaskList } from './utils'
 import { showNotification, clearNotification } from './notification.js'
 import { TaskInfo } from './types';
 
+// 保存所有任务的计时器
 const timer: { [index: string]: any } = {}
 
+// 提示信息
 const message = {
   installWelcomeTitle: 'Welcome to Mits',
   installWelcomeContent: 'Mits是一个基于系统级提示的Chrome插件',
@@ -27,12 +29,12 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         message: message.updateWelcomeContent
       }
     )
-    const { task: TaskList = [] } = await getTaskList()
-    TaskList.forEach(item => {
-      if(item.status) {
-        initializeTimer(item.id, item.interval, item)
+    const { task: taskList = [] } = await getTaskList()
+    taskList.forEach(task => {
+      if(task.status) {
+        initializeTimer(task.id, task.interval, task)
       }
-    })
+    })    
   }
 })
 
@@ -46,31 +48,35 @@ const onNotificationClose = () => {
 
 const initializeTimer = (timerId: string, interval: number, task: TaskInfo) => {
   timer[timerId] = setInterval(() => {
-    console.log(task.name)
-    showNotification(
-      {
-        title: task.name,
-        message: task.customPromptInfo
-      }
-    )
-  }, interval * 1000)
+    const message = {
+      title: task.name,
+      message: task.customPromptInfo
+    }
+    showNotification(message)
+  }, interval * 60 * 1000)
 }
 
 const clearTimer = (timerId: string) => {
-  debugger
-  clearInterval(timer[timerId])
-  delete timer?.[timerId]
+  if(timer[timerId]) {
+    clearInterval(timer[timerId])
+    delete timer?.[timerId]
+  }
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendRespons) => {
   showNotification(message)
-  if(message.type === 'add' && message.task.status) {
-    console.log('add timer', timer)
-    initializeTimer(message.task.id, message.task.interval, message.task)
+  if(message.type === 'add') {
+    if(message.task.status) {
+      initializeTimer(message.task.id, message.task.interval, message.task)
+    }
+  } else if (message.type === 'update') {
+    clearTimer(message.task.id)
+    if(message.task.status) {
+      initializeTimer(message.task.id, message.task.interval, message.task)
+    }
   } else if (message.type === 'delete') {
-    console.log('del timer', timer)
     clearTimer(message.task.id)
   }
-  
+
   sendRespons({ status: 'ok' })
 })

@@ -27,7 +27,7 @@
 import { reactive } from 'vue'
 import { TaskInfo } from '../types';
 import { getTaskList, setTaskList } from '../utils/index'
-import { deleteTaskNotice } from '../utils/ipc'
+import { deleteTaskNotice, updateTaskNotice } from '../utils/ipc'
 
 defineProps({
   taskList: {
@@ -53,7 +53,7 @@ const changeTaskStatus = async (row: any) => {
       task.status = row.status
     }
   })
-
+  await updateTaskNotice(row, [{ title: '确认' }])
   setTaskList(taskList)
 }
 
@@ -67,7 +67,7 @@ const deleteTack = async (row: TaskInfo) => {
   let { task: taskList = [] } = await getTaskList()
   taskList = taskList.filter(item => item.id !== row.id)
   setTaskList(taskList)
-  deleteTaskNotice(row)
+  deleteTaskNotice(row, [{ title: '确认' }])
   emit('refreshTaskList')
 }
 
