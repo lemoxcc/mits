@@ -3,8 +3,6 @@
 Hi, here is mits. It's a chrome plugin for notifications.
 
 ## content
-- [mits](#mits)
-  - [content](#content)
   - [background](#background)
   - [usage](#usage)
 
@@ -20,3 +18,5 @@ Hi, here is mits. It's a chrome plugin for notifications.
   1. Navigate to the Extensions page by entering `chrome://extensions`
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
   3. Click the Load unpacked button and select the extension directory.
+
+  Finally, you can use it.
