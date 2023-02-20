@@ -29,13 +29,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         message: message.updateWelcomeContent
       }
     )
-    const { task: taskList = [] } = await getTaskList()
-    taskList.forEach(task => {
-      if(task.status) {
-        initializeTimer(task.id, task.interval, task)
-      }
-    })    
   }
+
+  const { task: taskList = [] } = await getTaskList()
+  taskList.forEach(task => {
+    if(task.status) {
+      initializeTimer(task.id, task.interval, task)
+    }
+  })
 })
 
 const onNotificationButtonClick = (clickedId: string, buttonIndex: number) => {
