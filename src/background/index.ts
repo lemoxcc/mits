@@ -48,6 +48,7 @@ const onNotificationClose = () => {
 }
 
 const initializeTimer = (timerId: string, interval: number, task: TaskInfo) => {
+  clearInterval(timer[timerId])
   timer[timerId] = setInterval(() => {
     const message = {
       title: task.name,
