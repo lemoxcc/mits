@@ -29,13 +29,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
         message: message.updateWelcomeContent
       }
     )
-    const { task: taskList = [] } = await getTaskList()
-    taskList.forEach(task => {
-      if(task.status) {
-        initializeTimer(task.id, task.interval, task)
-      }
-    })    
   }
+
+  const { task: taskList = [] } = await getTaskList()
+  taskList.forEach(task => {
+    if(task.status) {
+      initializeTimer(task.id, task.interval, task)
+    }
+  })
 })
 
 const onNotificationButtonClick = (clickedId: string, buttonIndex: number) => {
@@ -47,6 +48,7 @@ const onNotificationClose = () => {
 }
 
 const initializeTimer = (timerId: string, interval: number, task: TaskInfo) => {
+  clearInterval(timer[timerId])
   timer[timerId] = setInterval(() => {
     const message = {
       title: task.name,
