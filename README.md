@@ -2,6 +2,10 @@
 
 Hi, here is mits. It's a chrome plugin for notifications.
 
+# translate
+  - en [English](README.md)
+  - zh [简体中文](README_zh.md)
+
 ## content
   - [background](#background)
   - [usage](#usage)
@@ -13,7 +17,7 @@ Hi, here is mits. It's a chrome plugin for notifications.
   First, you need to download and select the version you need in the released version, then please unzip it.
   Next, add the extracted file to the chrome extension.
   
-  ***具体步骤***
+  ***Specific steps***
 
   1. Navigate to the Extensions page by entering `chrome://extensions`
   2. Enable Developer Mode by clicking the toggle switch next to Developer mode.
